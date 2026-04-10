@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * It tells Spring Boot that this class will handle incoming HTTP requests (GET, POST, etc.)
  * AND it will automatically convert our Java responses directly into JSON format!
  */
+@CrossOrigin(origins = "*")
 @RestController
 /**
  * @RequestMapping defines the base URL for this entire controller.
@@ -48,7 +50,7 @@ public class StudentController {
      * @RequestBody takes the incoming JSON data from the request and turns it into a Java Student object!
      */
     @PostMapping
-    public ResponseEntity<Student> registerNewStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> registerNewStudent(@Valid @RequestBody Student student) {
         Student savedStudent = studentService.saveStudent(student);
         // We return the saved student along with a 201 CREATED status code
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
@@ -69,7 +71,7 @@ public class StudentController {
      */
     @PutMapping("{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable("id") Long studentId, 
-                                                 @RequestBody Student studentDetails) {
+                                                 @Valid @RequestBody Student studentDetails) {
         
         // 1. First, fetch the existing student from the database
         Student existingStudent = studentService.getStudentById(studentId);

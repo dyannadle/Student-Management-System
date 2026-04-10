@@ -3,6 +3,7 @@ package com.example.sms.service.impl;
 import com.example.sms.entity.Student;
 import com.example.sms.repository.StudentRepository;
 import com.example.sms.service.StudentService;
+import com.example.sms.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,9 +43,10 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(Long id) {
-        // Find by ID returns an "Optional", so we use .get() to extract the actual student 
-        // (Note: In a large app, we would handle the case where the ID isn't found).
-        return studentRepository.findById(id).get();
+        // If the ID doesn't exist, we throw our brand new ResourceNotFoundException!
+        return studentRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Student", "Id", id)
+        );
     }
 
     @Override

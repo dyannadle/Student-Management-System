@@ -1,6 +1,9 @@
 package com.example.sms.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -28,13 +31,17 @@ public class Student {
     private Long id;
 
     // By default, this creates a VARCHAR column named 'name'
+    @NotBlank(message = "Name is mandatory")
     @Column(nullable = false)
     private String name;
 
     // We can enforce uniqueness directly at the database level!
+    @NotBlank(message = "Email is mandatory")
+    @Email(message = "Please provide a valid email address")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Past(message = "Date of birth must be in the past")
     @Column(nullable = false)
     private LocalDate dob; // Date of Birth
 
