@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management Dashboard</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                <span class="logo-text">EduManage</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Students</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div>
+                    <h1 class="page-title">Students</h1>
+                    <p class="page-subtitle">Manage student records and enrollments</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openStudentModal()">
+                        <i class="fa-solid fa-plus"></i> Add Student
+                    </button>
+                </div>
+            </header>
+
+            <section class="content-section">
+                <!-- Data Table Container -->
+                <div class="table-container">
+                    <div class="table-header">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search students...">
+                        </div>
+                    </div>
+                    
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email Address</th>
+                                <th>Date of Birth</th>
+                                <th>Age</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- Rows will be populated by JS -->
+                            <tr>
+                                <td colspan="6" class="text-center">Loading students...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add/Edit Student Modal -->
+    <div id="studentModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Student</h2>
+                <button class="close-btn" onclick="closeStudentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="form-group">
+                        <label for="studentName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="studentName" placeholder="e.g., Jane Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentEmail">Email Address <span class="required">*</span></label>
+                        <input type="email" id="studentEmail" placeholder="e.g., jane@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentDob">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="studentDob" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeStudentModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveStudentBtn" onclick="saveStudent()">Save Student</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Main JS -->
+    <script src="app.js"></script>
+</body>
+</html>
