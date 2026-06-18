@@ -1,18 +1,37 @@
-# Student Management System
+# 🎓 Student Management System
 
-A robust, fully-commented Spring Boot REST API built to manage student records. This project was developed with a strong emphasis on best practices, including layered architecture (Three-Tier), Global Exception Handling, and Input Validation, making it an excellent resource for learning enterprise Java development.
+![Java 17](https://img.shields.io/badge/Java-17-orange.svg)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.4-brightgreen.svg)
+![MySQL](https://img.shields.io/badge/MySQL-Database-blue.svg)
+![REST API](https://img.shields.io/badge/REST-API-red.svg)
 
-## 🚀 Features
+A robust, enterprise-grade Spring Boot REST API built to manage student records. This project was developed with a strong emphasis on industry best practices, making it an excellent resource for learning backend Java development.
+
+## 🚀 Key Features & Best Practices
 - **RESTful API:** Full CRUD operations for managing students.
-- **Data Validation:** Enforces strict data integrity using Jakarta Validation (`@NotBlank`, `@Email`, `@Past`, etc.).
-- **Global Error Handling:** Clean, predictable JSON responses for errors (e.g., `404 Not Found`, `400 Bad Request`) via `@ControllerAdvice`.
 - **Three-Tier Architecture:** Clean separation of concerns between Controllers, Services, and Repositories.
-- **MySQL Integration:** Automatically generated database tables via Hibernate.
-- **CORS Enabled:** Ready to be consumed by any frontend framework (React, Angular, vanilla JS, etc.).
+- **DTO Pattern:** Utilizes Data Transfer Objects (DTOs) and Mappers to ensure secure data transfer and decouple API contracts from the database schema.
+- **Data Validation:** Enforces strict data integrity using Jakarta Validation (`@NotBlank`, `@Email`, etc.).
+- **Global Error Handling:** Clean, predictable JSON responses for errors (e.g., `404 Not Found`, `400 Bad Request`) via `@ControllerAdvice` and `@ExceptionHandler`.
+- **MySQL Integration:** Automatically generated database tables via Hibernate/Spring Data JPA.
+
+## 📂 Project Structure
+
+```text
+src/main/java/com/example/sms/
+├── controller    # Handles HTTP requests & REST endpoints
+├── dto           # Data Transfer Objects for API requests/responses
+├── entity        # JPA Entities representing database tables
+├── exception     # Custom exceptions & Global Exception Handler
+├── mapper        # Maps between Entities and DTOs
+├── repository    # Spring Data JPA interfaces for database interaction
+├── service       # Core business logic and transaction management
+└── StudentManagementSystemApplication.java
+```
 
 ## 🛠️ Technologies Used
 - **Language:** Java 17
-- **Framework:** Spring Boot  
+- **Framework:** Spring Boot 3.2.4
 - **Database:** MySQL
 - **Data Access:** Spring Data JPA / Hibernate
 - **Build Tool:** Maven
@@ -21,7 +40,7 @@ A robust, fully-commented Spring Boot REST API built to manage student records. 
 Before you begin, ensure you have met the following requirements:
 * You have installed **Java Development Kit (JDK) 17** or higher.
 * You have installed **Maven**.
-* You have a **MySQL** server running locally on port 3306.
+* You have a **MySQL** server running locally on port `3306`.
 
 ## ⚙️ Setup and Installation
 
@@ -64,9 +83,14 @@ To register a new student, send a `POST` request to `http://localhost:8080/api/s
 }
 ```
 
+## 📝 Interview Preparation
+A comprehensive set of 50 interview questions and answers based on this specific project has been compiled. It covers Architecture, Spring Boot Core, JPA, DTOs, and Exception Handling.
+👉 **[View the Interview Q&A Document](Interview_QnA.md)**
+
 ## 📚 Learning Focus
-This codebase is heavily commented line-by-line to explain exactly what each Spring Boot component does. It is structured to help you deeply understand:
-* **`@RestController` & `@RequestMapping`**: How web traffic is managed and how JSON converts to Java.
-* **`@Service` & `@Autowired`**: What "Dependency Injection" is and how it decouple logic.
-* **`@Repository` & `JpaRepository`**: How Spring Data automatically writes and executes SQL queries.
-* **`@Entity` & `@Table`**: How Java objects map directly to MySQL tables without writing schema migrations manually.
+This codebase is structured to help you deeply understand:
+* **`@RestController` & HTTP Methods**: How web traffic is managed and how JSON converts to Java.
+* **DTOs & Object Mapping**: Why we shouldn't expose internal database entities directly to the client.
+* **`@Service` & Dependency Injection**: What "Dependency Injection" is and how it decouples logic.
+* **`@Repository` & Spring Data JPA**: How Spring Data automatically writes and executes SQL queries.
+* **Global Exception Handling**: How to intercept exceptions centrally and return user-friendly error messages.
