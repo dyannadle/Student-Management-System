@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 // Import List interface to work with collections of students.
+import com.example.sms.dto.StudentDto;
+import com.example.sms.mapper.StudentMapper;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The @Service annotation is crucial here! 
@@ -42,42 +45,44 @@ public class StudentServiceImpl implements StudentService {
 
     // @Override ensures we are correctly implementing the method from the StudentService interface.
     @Override
-    public List<Student> getAllStudents() {
+    public List<StudentDto> getAllStudents() {
         // The repository gives us the magical "findAll()" method.
         // It automatically writes and executes a "SELECT * FROM students" SQL query behind the scenes!
         // We return the resulting List of Student objects directly.
-        return studentRepository.findAll();
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .map(StudentMapper::mapToStudentDto)
+                .collect(Collectors.toList());
     }
 
     // @Override ensures correct implementation.
     @Override
-    public Student saveStudent(Student student) {
-        // Calling .save() on the repository takes the Java object and writes it into the database table!
-        // It converts the Java properties into a "INSERT INTO students ..." SQL query.
-        // We return the saved student (which now has an automatically generated Database ID!).
-        return studentRepository.save(student);
+    public StudentDto saveStudent(StudentDto studentDto) {
+        Student student = StudentMapper.mapToStudent(studentDto);
+        Student savedStudent = studentRepository.save(student);
+        return StudentMapper.mapToStudentDto(savedStudent);
     }
 
     // @Override ensures correct implementation.
     @Override
-    public Student getStudentById(Long id) {
+    public StudentDto getStudentById(Long id) {
         // .findById(id) searches the database for a specific Primary Key.
         // It returns an "Optional" object, which means the database MIGHT find it, or it MIGHT NOT!
         // If the ID doesn't exist, the .orElseThrow() method gets triggered...
-        return studentRepository.findById(id).orElseThrow(
+        Student student = studentRepository.findById(id).orElseThrow(
                 // ...and we throw our brand new, custom ResourceNotFoundException!
                 // We pass in "Student" (the resource), "Id" (the field), and id (the value that failed).
                 () -> new ResourceNotFoundException("Student", "Id", id)
         );
+        return StudentMapper.mapToStudentDto(student);
     }
 
     // @Override ensures correct implementation.
     @Override
-    public Student updateStudent(Student student) {
-        // The .save() method works for generating a new row AND updating an existing row.
-        // If the passed 'student' object already has an ID that exists in the database, 
-        // JPA recognizes it and executes an "UPDATE students SET ... WHERE id = ?" query instead of INSERT.
-        return studentRepository.save(student);
+    public StudentDto updateStudent(StudentDto studentDto) {
+        Student student = StudentMapper.mapToStudent(studentDto);
+        Student updatedStudent = studentRepository.save(student);
+        return StudentMapper.mapToStudentDto(updatedStudent);
     }
 
     // @Override ensures correct implementation.

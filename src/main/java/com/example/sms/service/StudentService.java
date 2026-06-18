@@ -1,7 +1,6 @@
 package com.example.sms.service;
 
-// Import our Student Entity.
-import com.example.sms.entity.Student;
+import com.example.sms.dto.StudentDto;
 
 // Import List to handle returning multiple students at once.
 import java.util.List;
@@ -22,25 +21,25 @@ public interface StudentService {
      * Retrieve a list of all students currently in the database.
      * We don't say HOW it fetches them, just that it MUST return a List of Students.
      */
-    List<Student> getAllStudents();
+    List<StudentDto> getAllStudents();
 
     /**
      * Save a new student to the database.
-     * It expects you to pass in a 'Student' object, and it will return a 'Student' object when done.
+     * It expects you to pass in a 'StudentDto' object, and it will return a 'StudentDto' object when done.
      */
-    Student saveStudent(Student student);
+    StudentDto saveStudent(StudentDto studentDto);
 
     /**
      * Find a single student by searching for their unique database ID.
-     * It expects a 'Long' representing the ID, and returns the found 'Student'.
+     * It expects a 'Long' representing the ID, and returns the found 'StudentDto'.
      */
-    Student getStudentById(Long id);
+    StudentDto getStudentById(Long id);
 
     /**
      * Update an existing student's information.
-     * It takes the modified 'Student' object, saves the changes over the old record, and returns the result.
+     * It takes the modified 'StudentDto' object, saves the changes over the old record, and returns the result.
      */
-    Student updateStudent(Student student);
+    StudentDto updateStudent(StudentDto studentDto);
 
     /**
      * Permanently delete a student from the database using their unique ID.

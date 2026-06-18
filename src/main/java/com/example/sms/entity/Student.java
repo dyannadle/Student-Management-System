@@ -2,11 +2,6 @@ package com.example.sms.entity;
 
 // Import JPA decorators (like @Entity, @Table, @Id). "jakarta.persistence" is the modern version of "javax.persistence".
 import jakarta.persistence.*;
-// Import Validation tools to enforce rules on our data.
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-
 // Import Java date and time libraries for managing the Date of Birth.
 import java.time.LocalDate;
 import java.time.Period;
@@ -35,24 +30,16 @@ public class Student {
     // The actual variable that holds the ID.
     private Long id;
 
-    // @NotBlank ensures that the user cannot submit an empty or null name. 
-    @NotBlank(message = "Name is mandatory")
     // @Column(nullable = false) tells the MySQL Database to set this column to "NOT NULL".
     @Column(nullable = false)
     // The actual variable holding the student's name. (MySQL will build a VARCHAR column).
     private String name;
 
-    // We enforce that the email cannot be blank.
-    @NotBlank(message = "Email is mandatory")
-    // @Email checks if the string follows a valid email format (e.g. contains an '@').
-    @Email(message = "Please provide a valid email address")
     // unique = true enforce a database-level restriction so we cannot save duplicate emails!
     @Column(nullable = false, unique = true)
     // The actual variable holding the student's email.
     private String email;
 
-    // @Past ensures the user cannot submit a Date of Birth in the future!
-    @Past(message = "Date of birth must be in the past")
     @Column(nullable = false)
     // Using LocalDate instead of the older java.util.Date is standard practice in modern Java.
     private LocalDate dob;

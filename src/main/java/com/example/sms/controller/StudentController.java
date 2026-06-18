@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 
 // Import List to handle collections of students.
 import java.util.List;
+import com.example.sms.dto.StudentDto;
 
 /**
  * @CrossOrigin(origins = "*") is a security setting!
@@ -55,7 +56,7 @@ public class StudentController {
      * Because of the class-level @RequestMapping, this handles requests to "http://localhost:8080/api/students"
      */
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentDto>> getAllStudents() {
         // We call our service to get the giant list of students.
         // We wrap that list inside a ResponseEntity along with a "200 OK" success status code!
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
@@ -63,13 +64,13 @@ public class StudentController {
 
     /**
      * @PostMapping connects HTTP POST requests (used for submitting data) to this method.
-     * @Valid forces Spring to look at the @NotBlank and @Email rules we created in Student.java before allowing the code to run.
-     * @RequestBody takes the incoming raw JSON string and automatically parses it into a Java Student object!
+     * @Valid forces Spring to look at the @NotBlank and @Email rules we created in StudentDto.java before allowing the code to run.
+     * @RequestBody takes the incoming raw JSON string and automatically parses it into a Java StudentDto object!
      */
     @PostMapping
-    public ResponseEntity<Student> registerNewStudent(@Valid @RequestBody Student student) {
-        // We pass the new, valid Student object to our service layer to be saved into the MySQL database.
-        Student savedStudent = studentService.saveStudent(student);
+    public ResponseEntity<StudentDto> registerNewStudent(@Valid @RequestBody StudentDto studentDto) {
+        // We pass the new, valid StudentDto object to our service layer to be saved into the MySQL database.
+        StudentDto savedStudent = studentService.saveStudent(studentDto);
         // We return the newly saved student object along with a "201 CREATED" status code.
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
@@ -79,11 +80,11 @@ public class StudentController {
      * @PathVariable automatically grabs whatever number is placed in the {id} spot and hands it to us as a Long variable!
      */
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable("id") Long studentId) {
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable("id") Long studentId) {
         // We ask the service layer to fetch the student with this specific ID.
-        Student student = studentService.getStudentById(studentId);
+        StudentDto studentDto = studentService.getStudentById(studentId);
         // If successful, return the finding as JSON with a 200 OK.
-        return new ResponseEntity<>(student, HttpStatus.OK);
+        return new ResponseEntity<>(studentDto, HttpStatus.OK);
     }
 
     /**
@@ -91,21 +92,21 @@ public class StudentController {
      * We need BOTH an {id} from the URL and a JSON @RequestBody to define the new data.
      */
     @PutMapping("{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long studentId, 
-                                                 @Valid @RequestBody Student studentDetails) {
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") Long studentId, 
+                                                 @Valid @RequestBody StudentDto studentDetails) {
         
-        // 1. First, fetch the existing student from the database using their ID. 
+        // 1. First, fetch the existing student from the database using their ID to ensure they exist.
         // (If they don't exist, this throws an error and the method instantly stops!)
-        Student existingStudent = studentService.getStudentById(studentId);
+        StudentDto existingStudent = studentService.getStudentById(studentId);
         
         // 2. Overwrite the old properties with the new incoming properties manually.
         existingStudent.setName(studentDetails.getName());
         existingStudent.setEmail(studentDetails.getEmail());
         existingStudent.setDob(studentDetails.getDob());
-        // (Remember: Age is transient and automatically calculated, so we never save it!)
+        // (Remember: Age is transient and dynamically calculated, so we never save it!)
 
         // 3. Save the modified student back into the database.
-        Student updatedStudent = studentService.updateStudent(existingStudent);
+        StudentDto updatedStudent = studentService.updateStudent(existingStudent);
         // Return the modified student as JSON with a 200 OK.
         return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
     }
