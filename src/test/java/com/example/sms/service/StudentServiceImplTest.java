@@ -21,18 +21,40 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for the StudentService layer.
+ * 
+ * In Unit Testing, we want to isolate the class we are testing. 
+ * We do NOT want to connect to a real MySQL database. That would be an "Integration Test".
+ * 
+ * @ExtendWith(MockitoExtension.class) tells JUnit 5 to enable Mockito.
+ * Mockito allows us to create "fake" versions (Mocks) of our dependencies (like the Repository) 
+ * so we can control exactly what they return without needing a real database!
+ */
 @ExtendWith(MockitoExtension.class)
 class StudentServiceImplTest {
 
+    /**
+     * @Mock creates a fake version of the StudentRepository.
+     * It won't actually connect to a database. We will tell it exactly how to behave in each test.
+     */
     @Mock
     private StudentRepository studentRepository;
 
+    /**
+     * @InjectMocks creates a real instance of our StudentServiceImpl and 
+     * automatically injects the @Mock repository into it!
+     */
     @InjectMocks
     private StudentServiceImpl studentService;
 
     private Student student;
     private StudentDto studentDto;
 
+    /**
+     * @BeforeEach runs before EVERY single @Test method.
+     * We use this to set up our test data so we don't have to rewrite it for every test.
+     */
     @BeforeEach
     void setUp() {
         student = new Student();
@@ -48,18 +70,23 @@ class StudentServiceImplTest {
         studentDto.setDob(LocalDate.of(2000, 1, 1));
     }
 
+    /**
+     * @Test marks this method as a JUnit test case.
+     * A common pattern for tests is Arrange, Act, Assert (AAA).
+     */
     @Test
     void testGetAllStudents() {
-        // Arrange
+        // ARRANGE: Set up the mock's behavior. "When the service calls findAll(), return our fake list."
         when(studentRepository.findAll()).thenReturn(Arrays.asList(student));
 
-        // Act
+        // ACT: Actually call the method we are testing.
         List<StudentDto> students = studentService.getAllStudents();
 
-        // Assert
+        // ASSERT: Verify the result is exactly what we expected.
         assertNotNull(students);
         assertEquals(1, students.size());
         assertEquals("Jane Doe", students.get(0).getName());
+        // Verify that the mock repository was called exactly 1 time.
         verify(studentRepository, times(1)).findAll();
     }
 

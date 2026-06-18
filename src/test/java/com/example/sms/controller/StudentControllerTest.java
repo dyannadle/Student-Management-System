@@ -21,16 +21,32 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Integration tests for the StudentController layer.
+ * 
+ * @WebMvcTest(StudentController.class) tells Spring Boot to load ONLY the web layer (the Controller).
+ * It will not load the Service or Database layers, which makes the tests run much faster!
+ */
 @WebMvcTest(StudentController.class)
 class StudentControllerTest {
 
+    /**
+     * MockMvc allows us to send fake HTTP requests (GET, POST) to our Controller
+     * without actually starting a real web server.
+     */
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * @MockBean creates a fake version of the StudentService and places it into the Spring Application Context.
+     * This ensures the Controller has a service to talk to, but we get to control what the service returns.
+     */
     @MockBean
     private StudentService studentService;
 
     private StudentDto studentDto;
+    
+    // ObjectMapper is used to convert Java objects into JSON strings and vice-versa.
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -46,14 +62,19 @@ class StudentControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
+    /**
+     * Test a GET request to retrieve all students.
+     */
     @Test
     void testGetAllStudents() throws Exception {
+        // ARRANGE
         when(studentService.getAllStudents()).thenReturn(Arrays.asList(studentDto));
 
+        // ACT & ASSERT: Perform the GET request and check the expectations
         mockMvc.perform(get("/api/students"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].name").value("Jane Doe"))
+                .andExpect(status().isOk()) // Expect a 200 OK status
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // Expect JSON format
+                .andExpect(jsonPath("$[0].name").value("Jane Doe")) // Check the JSON payload value
                 .andExpect(jsonPath("$[0].email").value("jane@example.com"));
     }
 

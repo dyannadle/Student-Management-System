@@ -48,8 +48,10 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllStudents() {
         // The repository gives us the magical "findAll()" method.
         // It automatically writes and executes a "SELECT * FROM students" SQL query behind the scenes!
-        // We return the resulting List of Student objects directly.
         List<Student> students = studentRepository.findAll();
+        
+        // We use Java Streams to iterate through the list of Database Entities
+        // and map (convert) each one into a safe StudentDto before returning it!
         return students.stream()
                 .map(StudentMapper::mapToStudentDto)
                 .collect(Collectors.toList());
@@ -58,8 +60,14 @@ public class StudentServiceImpl implements StudentService {
     // @Override ensures correct implementation.
     @Override
     public StudentDto saveStudent(StudentDto studentDto) {
+        // Step 1: Convert the incoming DTO into a Database Entity so JPA can read it.
         Student student = StudentMapper.mapToStudent(studentDto);
+        
+        // Step 2: Calling .save() on the repository takes the Java object and writes it into the database table!
+        // It converts the Java properties into a "INSERT INTO students ..." SQL query.
         Student savedStudent = studentRepository.save(student);
+        
+        // Step 3: Convert the newly saved Entity (which now has an automatically generated ID) back into a DTO to return.
         return StudentMapper.mapToStudentDto(savedStudent);
     }
 
@@ -80,8 +88,15 @@ public class StudentServiceImpl implements StudentService {
     // @Override ensures correct implementation.
     @Override
     public StudentDto updateStudent(StudentDto studentDto) {
+        // Convert the updated DTO back into an Entity.
         Student student = StudentMapper.mapToStudent(studentDto);
+        
+        // The .save() method works for generating a new row AND updating an existing row.
+        // If the passed 'student' object already has an ID that exists in the database, 
+        // JPA recognizes it and executes an "UPDATE students SET ... WHERE id = ?" query instead of INSERT.
         Student updatedStudent = studentRepository.save(student);
+        
+        // Return the successfully updated data as a DTO.
         return StudentMapper.mapToStudentDto(updatedStudent);
     }
 

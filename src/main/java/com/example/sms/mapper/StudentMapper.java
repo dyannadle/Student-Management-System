@@ -3,9 +3,20 @@ package com.example.sms.mapper;
 import com.example.sms.dto.StudentDto;
 import com.example.sms.entity.Student;
 
+/**
+ * Utility class to map between our internal Student Entity and the external StudentDto.
+ * 
+ * Why do we need this?
+ * Entities shouldn't be exposed directly to the outside world. DTOs (Data Transfer Objects) are what the API uses.
+ * This mapper acts as the translator between the database world (Entity) and the API world (DTO).
+ */
 public class StudentMapper {
 
-    // Convert JPA Entity into StudentDto
+    /**
+     * Converts a JPA Entity (from the database) into a StudentDto (to be sent via API).
+     * @param student The database entity
+     * @return The DTO containing the safe, formatted data
+     */
     public static StudentDto mapToStudentDto(Student student) {
         if (student == null) {
             return null;
@@ -20,7 +31,11 @@ public class StudentMapper {
         );
     }
 
-    // Convert StudentDto into JPA Entity
+    /**
+     * Converts a StudentDto (received via API) into a JPA Entity (to be saved in the database).
+     * @param studentDto The incoming payload from the user
+     * @return The newly created Entity
+     */
     public static Student mapToStudent(StudentDto studentDto) {
         if (studentDto == null) {
             return null;
