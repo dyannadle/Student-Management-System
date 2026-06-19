@@ -26,6 +26,25 @@ public class AnalyticsDto {
 
     public AnalyticsDto() {}
 
+    public AnalyticsDto(Long totalStudents, Double averageGpa, Double averageAttendance,
+                        Double mathAvg, Double scienceAvg, Double literatureAvg, Double historyAvg, Double artsAvg, Double technologyAvg,
+                        Double term1Avg, Double term2Avg, Double term3Avg, Double term4Avg, Double term5Avg, Double term6Avg) {
+        this.totalStudents = totalStudents != null ? totalStudents : 0;
+        this.averageGpa = averageGpa != null ? averageGpa : 0.0;
+        this.averageAttendance = averageAttendance != null ? averageAttendance : 0.0;
+        this.mathAvg = mathAvg != null ? mathAvg : 0.0;
+        this.scienceAvg = scienceAvg != null ? scienceAvg : 0.0;
+        this.literatureAvg = literatureAvg != null ? literatureAvg : 0.0;
+        this.historyAvg = historyAvg != null ? historyAvg : 0.0;
+        this.artsAvg = artsAvg != null ? artsAvg : 0.0;
+        this.technologyAvg = technologyAvg != null ? technologyAvg : 0.0;
+        this.term1Avg = term1Avg != null ? term1Avg : 0.0;
+        this.term2Avg = term2Avg != null ? term2Avg : 0.0;
+        this.term3Avg = term3Avg != null ? term3Avg : 0.0;
+        this.term4Avg = term4Avg != null ? term4Avg : 0.0;
+        this.term5Avg = term5Avg != null ? term5Avg : 0.0;
+        this.term6Avg = term6Avg != null ? term6Avg : 0.0;
+    }
     public long getTotalStudents() { return totalStudents; }
     public void setTotalStudents(long totalStudents) { this.totalStudents = totalStudents; }
 

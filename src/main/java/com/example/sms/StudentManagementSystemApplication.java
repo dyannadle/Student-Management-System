@@ -2,6 +2,7 @@ package com.example.sms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * @SpringBootApplication is a powerful 'super' annotation. It combines 3 annotations:
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 3. @ComponentScan - Tells Spring to look for other components, configurations, and services in the 'com.example.sms' package.
  */
 @SpringBootApplication
+@EnableCaching
 public class StudentManagementSystemApplication {
 
 	public static void main(String[] args) {

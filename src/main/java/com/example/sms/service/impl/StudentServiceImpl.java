@@ -10,6 +10,7 @@ import com.example.sms.service.StudentService;
 import com.example.sms.exception.ResourceNotFoundException;
 // Import Autowired to allow Spring to automatically inject dependencies.
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 // Import Service to declare this class as a Spring Service component.
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
 
     // @Override ensures correct implementation.
     @Override
+    @CacheEvict(value = "dashboardAnalytics", allEntries = true)
     public StudentDto saveStudent(StudentDto studentDto) {
         // Step 1: Convert the incoming DTO into a Database Entity so JPA can read it.
         Student student = StudentMapper.mapToStudent(studentDto);
@@ -84,6 +86,7 @@ public class StudentServiceImpl implements StudentService {
 
     // @Override ensures correct implementation.
     @Override
+    @CacheEvict(value = "dashboardAnalytics", allEntries = true)
     public StudentDto updateStudent(StudentDto studentDto) {
         // Convert the updated DTO back into an Entity.
         Student student = StudentMapper.mapToStudent(studentDto);
@@ -99,6 +102,7 @@ public class StudentServiceImpl implements StudentService {
 
     // @Override ensures correct implementation.
     @Override
+    @CacheEvict(value = "dashboardAnalytics", allEntries = true)
     public void deleteStudentById(Long id) {
         // We simply call .deleteById() and pass the specific student's ID.
         // Behind the scenes, it executes a "DELETE FROM students WHERE id = ?" SQL query.

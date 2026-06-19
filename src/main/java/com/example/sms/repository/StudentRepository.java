@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 // Import Optional, which helps us handle cases where a database row isn't found (avoiding NullPointerExceptions).
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
+import com.example.sms.dto.AnalyticsDto;
+
 /**
  * The @Repository annotation tells Spring that this is a Data Access object.
  * It registers this Interface in the Spring Context so it can be @Autowired into the Service Layer.
@@ -35,4 +38,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
      * Returning an "Optional<Student>" means it will safely return an empty result if the email is not found.
      */
     Optional<Student> findStudentByEmail(String email);
+
+    @Query("SELECT new com.example.sms.dto.AnalyticsDto(" +
+           "COUNT(s), " +
+           "AVG(a.gpa), AVG(a.attendancePercentage), " +
+           "AVG(a.mathScore), AVG(a.scienceScore), AVG(a.literatureScore), " +
+           "AVG(a.historyScore), AVG(a.artsScore), AVG(a.technologyScore), " +
+           "AVG(a.term1Score), AVG(a.term2Score), AVG(a.term3Score), " +
+           "AVG(a.term4Score), AVG(a.term5Score), AVG(a.term6Score)) " +
+           "FROM Student s LEFT JOIN s.academicProfile a")
+    AnalyticsDto getDashboardAnalytics();
 }
