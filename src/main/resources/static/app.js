@@ -287,9 +287,15 @@ function checkAuth() {
     const loginModal = document.getElementById('loginModal');
     
     if (!token) {
-        if (loginModal) loginModal.classList.remove('hidden');
+        if (loginModal) {
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('active');
+        }
     } else {
-        if (loginModal) loginModal.classList.add('hidden');
+        if (loginModal) {
+            loginModal.classList.remove('active');
+            loginModal.classList.add('hidden');
+        }
         fetchStudents();
     }
 }
@@ -314,6 +320,7 @@ async function handleLogin(event) {
         const data = await response.json();
         localStorage.setItem('jwt', data.jwt);
         
+        document.getElementById('loginModal').classList.remove('active');
         document.getElementById('loginModal').classList.add('hidden');
         showToast('Success', 'Logged in successfully!', 'success');
         fetchStudents();
