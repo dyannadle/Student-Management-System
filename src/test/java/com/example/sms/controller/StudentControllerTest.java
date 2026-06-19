@@ -2,11 +2,14 @@ package com.example.sms.controller;
 
 import com.example.sms.dto.StudentDto;
 import com.example.sms.service.StudentService;
+import com.example.sms.security.CustomUserDetailsService;
+import com.example.sms.security.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -30,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * It will not load the Service or Database layers, which makes the tests run much faster!
  */
 @WebMvcTest(StudentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class StudentControllerTest {
 
     /**
@@ -45,6 +49,12 @@ class StudentControllerTest {
      */
     @MockBean
     private StudentService studentService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @MockBean
+    private CustomUserDetailsService userDetailsService;
 
     private StudentDto studentDto;
     

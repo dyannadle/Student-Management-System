@@ -1,6 +1,10 @@
 // dashboard.js - Analytics Logic
 
-const API_BASE_URL = 'http://localhost:8081/api/students';
+const CONFIG = {
+    BASE_URL: 'http://localhost:8081/api'
+};
+const API_STUDENTS_URL = `${CONFIG.BASE_URL}/students`;
+const API_ANALYTICS_URL = `${CONFIG.BASE_URL}/analytics/dashboard`;
 
 // DOM Elements
 const elTotalStudents = document.getElementById('metric-total-students');
@@ -42,7 +46,7 @@ async function fetchDashboardData() {
         const headers = { 'Authorization': `Bearer ${token}` };
 
         // Fetch Students for Recent Table (Top 5 newest)
-        const studentResponse = await fetch(`${API_BASE_URL}?page=0&size=5&sortBy=id&direction=desc`, { headers });
+        const studentResponse = await fetch(`${API_STUDENTS_URL}?page=0&size=5&sortBy=id&direction=desc`, { headers });
         
         if (studentResponse.status === 401 || studentResponse.status === 403) {
             window.location.href = 'index.html'; // redirect to login page
@@ -54,7 +58,7 @@ async function fetchDashboardData() {
         const students = studentsPage.content || [];
         
         // Fetch Real Analytics Data
-        const analyticsResponse = await fetch('http://localhost:8081/api/analytics/dashboard', { headers });
+        const analyticsResponse = await fetch(API_ANALYTICS_URL, { headers });
         if (!analyticsResponse.ok) throw new Error('Failed to fetch analytics data');
         const analytics = await analyticsResponse.json();
         

@@ -1,6 +1,10 @@
 // app.js - Frontend Logic
 
-const API_BASE_URL = 'http://localhost:8081/api/students';
+const CONFIG = {
+    BASE_URL: 'http://localhost:8081/api'
+};
+const API_STUDENTS_URL = `${CONFIG.BASE_URL}/students`;
+const API_AUTH_URL = `${CONFIG.BASE_URL}/auth/login`;
 
 // DOM Elements
 const studentTableBody = document.getElementById('studentTableBody');
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchStudents() {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await fetch(API_BASE_URL, {
+        const response = await fetch(API_STUDENTS_URL, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -164,7 +168,7 @@ async function saveStudent() {
     };
 
     const isEditing = inputId.value !== '';
-    const url = isEditing ? `${API_BASE_URL}/${inputId.value}` : API_BASE_URL;
+    const url = isEditing ? `${API_STUDENTS_URL}/${inputId.value}` : API_STUDENTS_URL;
     const method = isEditing ? 'PUT' : 'POST';
 
     try {
@@ -213,7 +217,7 @@ async function deleteStudent(id) {
 
     try {
         const token = localStorage.getItem('jwt');
-        const response = await fetch(`${API_BASE_URL}/${id}`, {
+        const response = await fetch(`${API_STUDENTS_URL}/${id}`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -272,4 +276,53 @@ function showToast(title, message, type = 'info') {
             toast.remove();
         }, 400);
     }, 3000);
+}
+
+// ==========================================
+// AUTHENTICATION LOGIC
+// ==========================================
+
+function checkAuth() {
+    const token = localStorage.getItem('jwt');
+    const loginModal = document.getElementById('loginModal');
+    
+    if (!token) {
+        if (loginModal) loginModal.classList.remove('hidden');
+    } else {
+        if (loginModal) loginModal.classList.add('hidden');
+        fetchStudents();
+    }
+}
+
+async function handleLogin(event) {
+    event.preventDefault();
+    const usernameInput = document.getElementById('loginUsername').value;
+    const passwordInput = document.getElementById('loginPassword').value;
+
+    try {
+        const response = await fetch(API_AUTH_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: usernameInput, password: passwordInput })
+        });
+
+        if (!response.ok) {
+            showToast('Login Failed', 'Incorrect username or password', 'error');
+            return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('jwt', data.jwt);
+        
+        document.getElementById('loginModal').classList.add('hidden');
+        showToast('Success', 'Logged in successfully!', 'success');
+        fetchStudents();
+    } catch (error) {
+        showToast('Error', 'Server unreachable', 'error');
+    }
+}
+
+function handleLogout() {
+    localStorage.removeItem('jwt');
+    window.location.reload();
 }
