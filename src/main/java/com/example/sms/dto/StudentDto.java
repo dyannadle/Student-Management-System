@@ -40,15 +40,19 @@ public class StudentDto {
      */
     private Integer age;
 
+    // Nested DTO to hold the academic grades for this student
+    private AcademicProfileDto academicProfile;
+
     public StudentDto() {
     }
 
-    public StudentDto(Long id, String name, String email, LocalDate dob, Integer age) {
+    public StudentDto(Long id, String name, String email, LocalDate dob, Integer age, AcademicProfileDto academicProfile) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
         this.age = age;
+        this.academicProfile = academicProfile;
     }
 
     public Long getId() {
@@ -89,5 +93,13 @@ public class StudentDto {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public AcademicProfileDto getAcademicProfile() {
+        return academicProfile;
+    }
+
+    public void setAcademicProfile(AcademicProfileDto academicProfile) {
+        this.academicProfile = academicProfile;
     }
 }

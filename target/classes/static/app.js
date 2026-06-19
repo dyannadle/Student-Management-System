@@ -1,6 +1,6 @@
 // app.js - Frontend Logic
 
-const API_BASE_URL = 'http://localhost:8080/api/students';
+const API_BASE_URL = 'http://localhost:8081/api/students';
 
 // DOM Elements
 const studentTableBody = document.getElementById('studentTableBody');
@@ -99,6 +99,22 @@ function editStudent(id) {
     inputEmail.value = student.email;
     inputDob.value = student.dob;
 
+    if (student.academicProfile) {
+        document.getElementById('studentGpa').value = student.academicProfile.gpa;
+        document.getElementById('studentAttendance').value = student.academicProfile.attendancePercentage;
+        document.getElementById('mathScore').value = student.academicProfile.mathScore;
+        document.getElementById('scienceScore').value = student.academicProfile.scienceScore;
+        document.getElementById('term1Score').value = student.academicProfile.term1Score;
+        document.getElementById('term2Score').value = student.academicProfile.term2Score;
+    } else {
+        document.getElementById('studentGpa').value = '';
+        document.getElementById('studentAttendance').value = '';
+        document.getElementById('mathScore').value = '';
+        document.getElementById('scienceScore').value = '';
+        document.getElementById('term1Score').value = '';
+        document.getElementById('term2Score').value = '';
+    }
+
     modalTitle.textContent = 'Edit Student';
     studentModal.classList.remove('hidden');
     setTimeout(() => {
@@ -125,7 +141,15 @@ async function saveStudent() {
     const studentData = {
         name: inputName.value.trim(),
         email: inputEmail.value.trim(),
-        dob: inputDob.value
+        dob: inputDob.value,
+        academicProfile: {
+            gpa: parseFloat(document.getElementById('studentGpa').value) || 0.0,
+            attendancePercentage: parseFloat(document.getElementById('studentAttendance').value) || 0.0,
+            mathScore: parseInt(document.getElementById('mathScore').value) || 0,
+            scienceScore: parseInt(document.getElementById('scienceScore').value) || 0,
+            term1Score: parseInt(document.getElementById('term1Score').value) || 0,
+            term2Score: parseInt(document.getElementById('term2Score').value) || 0
+        }
     };
 
     const isEditing = inputId.value !== '';

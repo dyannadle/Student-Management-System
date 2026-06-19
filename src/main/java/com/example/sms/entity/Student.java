@@ -44,6 +44,11 @@ public class Student {
     // Using LocalDate instead of the older java.util.Date is standard practice in modern Java.
     private LocalDate dob;
 
+    // This annotation tells JPA to automatically save the AcademicProfile when the Student is saved.
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "academic_profile_id", referencedColumnName = "id")
+    private AcademicProfile academicProfile;
+
     /**
      * @Transient is a very special annotation!
      * It tells Hibernate: "Do NOT create an 'age' column in the database."
@@ -92,7 +97,17 @@ public class Student {
     // Return the date of birth.
     public LocalDate getDob() { return dob; }
     // Update the date of birth.
-    public void setDob(LocalDate dob) { this.dob = dob; }
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
+    public AcademicProfile getAcademicProfile() {
+        return academicProfile;
+    }
+
+    public void setAcademicProfile(AcademicProfile academicProfile) {
+        this.academicProfile = academicProfile;
+    }
 
     // Custom Getter for Age: Automatically calculates the age!
     public Integer getAge() {

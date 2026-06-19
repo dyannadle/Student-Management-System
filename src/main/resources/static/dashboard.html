@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - EduManage</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js for premium visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                <span class="logo-text">EduManage</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="nav-item">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Students</span>
+                </a>
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" onclick="alert('Settings feature coming soon!')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div>
+                    <h1 class="page-title">Analytics Dashboard</h1>
+                    <p class="page-subtitle">Track academic performance and institutional metrics</p>
+                </div>
+            </header>
+
+            <section class="content-section">
+                <!-- Top Metric Cards -->
+                <div class="dashboard-grid metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3 id="metric-total-students">--</h3>
+                            <p>Total Enrolled</p>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3 id="metric-avg-gpa">--</h3>
+                            <p>Average Institution GPA</p>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div class="metric-data">
+                            <h3 id="metric-avg-attendance">--</h3>
+                            <p>Average Attendance</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="dashboard-grid charts-grid">
+                    <!-- Academic Performance Over Terms -->
+                    <div class="chart-card span-2">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-arrow-trend-up"></i> Term Performance Trends</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="termPerformanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Age Distribution -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Demographics</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="ageDistributionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Unit Performance (Radar) -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-layer-group"></i> Unit Performance</h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="unitPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Enrollments Table -->
+                    <div class="chart-card span-2">
+                        <div class="chart-header">
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Enrollments</h3>
+                        </div>
+                        <div class="table-container no-padding">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Join Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentEnrollmentsBody">
+                                    <tr><td colspan="3" class="text-center">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Dashboard Logic -->
+    <script src="dashboard.js"></script>
+</body>
+</html>
