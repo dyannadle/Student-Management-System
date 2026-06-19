@@ -38,13 +38,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchDashboardData() {
     try {
-        // Fetch Students for Recent Table and Demographics
-        const studentResponse = await fetch(API_BASE_URL);
+        const token = localStorage.getItem('jwt');
+        const headers = { 'Authorization': `Bearer ${token}` };
+
+        // Fetch Students for Recent Table (Top 5 newest)
+        const studentResponse = await fetch(`${API_BASE_URL}?page=0&size=5&sortBy=id&direction=desc`, { headers });
+        
+        if (studentResponse.status === 401 || studentResponse.status === 403) {
+            window.location.href = 'index.html'; // redirect to login page
+            return;
+        }
+        
         if (!studentResponse.ok) throw new Error('Failed to fetch students data');
-        const students = await studentResponse.json();
+        const studentsPage = await studentResponse.json();
+        const students = studentsPage.content || [];
         
         // Fetch Real Analytics Data
-        const analyticsResponse = await fetch('http://localhost:8081/api/analytics/dashboard');
+        const analyticsResponse = await fetch('http://localhost:8081/api/analytics/dashboard', { headers });
         if (!analyticsResponse.ok) throw new Error('Failed to fetch analytics data');
         const analytics = await analyticsResponse.json();
         
@@ -82,9 +92,8 @@ function renderRecentEnrollments(students) {
         return;
     }
     
-    // Sort descending by ID to get the newest
-    const sorted = [...students].sort((a, b) => b.id - a.id);
-    const recent = sorted.slice(0, 5); // Take top 5
+    // Since the API already returns them sorted descending (top 5), we can just render them!
+    const recent = students;
     
     recentEnrollmentsBody.innerHTML = recent.map(s => `
         <tr>

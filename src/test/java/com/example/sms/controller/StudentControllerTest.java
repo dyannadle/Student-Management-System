@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -68,14 +70,14 @@ class StudentControllerTest {
     @Test
     void testGetAllStudents() throws Exception {
         // ARRANGE
-        when(studentService.getAllStudents()).thenReturn(Arrays.asList(studentDto));
+        when(studentService.getAllStudents(any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(studentDto)));
 
         // ACT & ASSERT: Perform the GET request and check the expectations
         mockMvc.perform(get("/api/students"))
                 .andExpect(status().isOk()) // Expect a 200 OK status
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // Expect JSON format
-                .andExpect(jsonPath("$[0].name").value("Jane Doe")) // Check the JSON payload value
-                .andExpect(jsonPath("$[0].email").value("jane@example.com"));
+                .andExpect(jsonPath("$.content[0].name").value("Jane Doe")) // Check the JSON payload value
+                .andExpect(jsonPath("$.content[0].email").value("jane@example.com"));
     }
 
     @Test

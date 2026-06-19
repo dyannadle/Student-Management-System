@@ -1,8 +1,9 @@
 package com.example.sms.service;
 
 import com.example.sms.dto.StudentDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-// Import List to handle returning multiple students at once.
 import java.util.List;
 
 /**
@@ -18,10 +19,9 @@ import java.util.List;
 public interface StudentService {
 
     /**
-     * Retrieve a list of all students currently in the database.
-     * We don't say HOW it fetches them, just that it MUST return a List of Students.
+     * Retrieve a paginated list of all students currently in the database.
      */
-    List<StudentDto> getAllStudents();
+    Page<StudentDto> getAllStudents(Pageable pageable);
 
     /**
      * Save a new student to the database.

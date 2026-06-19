@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 // Import @Valid to trigger input data validation.
 import jakarta.validation.Valid;
 
-// Import List to handle collections of students.
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.util.List;
 import com.example.sms.dto.StudentDto;
 
@@ -56,10 +59,17 @@ public class StudentController {
      * Because of the class-level @RequestMapping, this handles requests to "http://localhost:8080/api/students"
      */
     @GetMapping
-    public ResponseEntity<List<StudentDto>> getAllStudents() {
-        // We call our service to get the giant list of students.
-        // We wrap that list inside a ResponseEntity along with a "200 OK" success status code!
-        return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.OK);
+    public ResponseEntity<Page<StudentDto>> getAllStudents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction) {
+        
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return new ResponseEntity<>(studentService.getAllStudents(pageable), HttpStatus.OK);
     }
 
     /**

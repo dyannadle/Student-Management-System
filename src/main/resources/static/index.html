@@ -151,6 +151,30 @@
     <!-- Toast Notifications Container -->
     <div id="toastContainer" class="toast-container"></div>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal-overlay" style="z-index: 2000;">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="justify-content: center;">
+                <h2><i class="fa-solid fa-lock"></i> Admin Login</h2>
+            </div>
+            <div class="modal-body" style="text-align: left;">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginUsername">Username</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="justify-content: center;">
+                <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin(event)">Login to Continue</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main JS -->
     <script src="app.js"></script>
 </body>

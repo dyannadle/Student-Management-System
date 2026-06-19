@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 // Import List interface to work with collections of students.
 import com.example.sms.dto.StudentDto;
 import com.example.sms.mapper.StudentMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,16 +48,10 @@ public class StudentServiceImpl implements StudentService {
 
     // @Override ensures we are correctly implementing the method from the StudentService interface.
     @Override
-    public List<StudentDto> getAllStudents() {
-        // The repository gives us the magical "findAll()" method.
-        // It automatically writes and executes a "SELECT * FROM students" SQL query behind the scenes!
-        List<Student> students = studentRepository.findAll();
+    public Page<StudentDto> getAllStudents(Pageable pageable) {
+        Page<Student> studentsPage = studentRepository.findAll(pageable);
         
-        // We use Java Streams to iterate through the list of Database Entities
-        // and map (convert) each one into a safe StudentDto before returning it!
-        return students.stream()
-                .map(StudentMapper::mapToStudentDto)
-                .collect(Collectors.toList());
+        return studentsPage.map(StudentMapper::mapToStudentDto);
     }
 
     // @Override ensures correct implementation.

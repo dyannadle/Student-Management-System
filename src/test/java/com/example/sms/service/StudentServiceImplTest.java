@@ -16,6 +16,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,18 +79,18 @@ class StudentServiceImplTest {
      */
     @Test
     void testGetAllStudents() {
-        // ARRANGE: Set up the mock's behavior. "When the service calls findAll(), return our fake list."
-        when(studentRepository.findAll()).thenReturn(Arrays.asList(student));
+        // ARRANGE: Set up the mock's behavior.
+        when(studentRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(student)));
 
         // ACT: Actually call the method we are testing.
-        List<StudentDto> students = studentService.getAllStudents();
+        Page<StudentDto> students = studentService.getAllStudents(org.springframework.data.domain.PageRequest.of(0, 10));
 
         // ASSERT: Verify the result is exactly what we expected.
         assertNotNull(students);
-        assertEquals(1, students.size());
-        assertEquals("Jane Doe", students.get(0).getName());
+        assertEquals(1, students.getContent().size());
+        assertEquals("Jane Doe", students.getContent().get(0).getName());
         // Verify that the mock repository was called exactly 1 time.
-        verify(studentRepository, times(1)).findAll();
+        verify(studentRepository, times(1)).findAll(any(Pageable.class));
     }
 
     @Test

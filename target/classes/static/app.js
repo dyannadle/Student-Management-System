@@ -22,7 +22,7 @@ let students = [];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    fetchStudents();
+    checkAuth();
 
     // Setup Search
     searchInput.addEventListener('input', (e) => {
@@ -38,10 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
 // Fetch all students from API
 async function fetchStudents() {
     try {
-        const response = await fetch(API_BASE_URL);
+        const token = localStorage.getItem('jwt');
+        const response = await fetch(API_BASE_URL, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.status === 401 || response.status === 403) {
+            handleLogout();
+            return;
+        }
+        
         if (!response.ok) throw new Error('Failed to fetch students');
         
-        students = await response.json();
+        const data = await response.json();
+        // Since we enabled pagination, the array is inside data.content
+        students = data.content ? data.content : data;
         renderStudents(students);
     } catch (error) {
         console.error('Error fetching students:', error);
@@ -161,13 +172,20 @@ async function saveStudent() {
         saveStudentBtn.disabled = true;
         saveStudentBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
+        const token = localStorage.getItem('jwt');
         const response = await fetch(url, {
             method: method,
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(studentData)
         });
+
+        if (response.status === 401 || response.status === 403) {
+            handleLogout();
+            return;
+        }
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -194,9 +212,16 @@ async function deleteStudent(id) {
     }
 
     try {
+        const token = localStorage.getItem('jwt');
         const response = await fetch(`${API_BASE_URL}/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
         });
+        
+        if (response.status === 401 || response.status === 403) {
+            handleLogout();
+            return;
+        }
 
         if (!response.ok) throw new Error('Failed to delete student');
 
